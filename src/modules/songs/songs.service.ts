@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { CreateSongDto } from './dto/create-song.dto';
 
 @Injectable()
 export class SongsService {
-  async create(): Promise<String> {
-    return 'Create new song';
+  private songs = [];
+
+  async create(createSongDto: CreateSongDto): Promise<CreateSongDto> {
+    this.songs.push(createSongDto);
+    return createSongDto;
   }
 
-  async findAll(): Promise<String> {
-    return 'Find all songs';
+  async findAll(): Promise<CreateSongDto[]> {
+    return this.songs;
   }
 
   async findOne(id: number): Promise<String> {
