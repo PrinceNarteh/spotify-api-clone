@@ -29,3 +29,5 @@ export class CreateSongDto {
   @IsOptional()
   readonly lyrics: string;
 }
+
+export type UpdateSongDto = Partial<CreateSongDto>;
