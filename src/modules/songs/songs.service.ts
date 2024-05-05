@@ -38,7 +38,7 @@ export class SongsService {
   }
 
   async delete(id: number): Promise<String> {
-    await this.songsRepository.delete({ id });
+    await this.songsRepository.delete(id);
     return `Song Delete successfully`;
   }
 }
