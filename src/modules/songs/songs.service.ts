@@ -2,7 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSongDto, UpdateSongDto } from './dto/song.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Song } from './entities/song.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
+import {
+  IPaginationOptions,
+  Pagination,
+  paginate,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class SongsService {
@@ -18,6 +23,10 @@ export class SongsService {
     return await this.songsRepository.find();
   }
 
+  async paginate(options: IPaginationOptions): Promise<Pagination<Song>> {
+    return paginate(this.songsRepository, options);
+  }
+
   async findOne(id: number): Promise<Song> {
     const song = await this.songsRepository.findOneBy({ id });
     if (!song) {
@@ -26,11 +35,11 @@ export class SongsService {
     return song;
   }
 
-  async update(id: number, updateSongDto: UpdateSongDto): Promise<Song> {
-    const song = await this.songsRepository.preload({
-      id,
-      updateSongDto,
-    });
+  async update(
+    id: number,
+    updateSongDto: UpdateSongDto,
+  ): Promise<UpdateResult> {
+    const song = await this.songsRepository.update(id, updateSongDto);
     if (!song) {
       throw new NotFoundException('Song Not Found');
     }
