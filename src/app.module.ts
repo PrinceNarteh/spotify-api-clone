@@ -8,6 +8,7 @@ import { SongsController } from 'songs/songs.controller';
 import { PlaylistsModule } from './modules/playlists/playlists.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { EnvModule } from './env/env.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { DataSource } from 'typeorm';
     SongsModule,
     CommonModule,
     PlaylistsModule,
+    EnvModule,
   ],
   controllers: [AppController],
   providers: [AppService],

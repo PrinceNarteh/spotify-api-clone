@@ -1,0 +1,13 @@
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { ENV_VALIDATION_SCHEMS } from './utils/env.constants';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      expandVariables: true,
+      validationSchema: ENV_VALIDATION_SCHEMS,
+    }),
+  ],
+})
+export class EnvModule {}
