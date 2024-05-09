@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { IdDto } from 'common/dtos/id.dto';
-import { CreateSongDto, UpdateSongDto } from './dto/song.dto';
+import { CreateSongDTO, UpdateSongDTO } from './dto/song.dto';
 import { Song } from './entities/song.entity';
 import { UpdateResult } from 'typeorm';
 import { Pagination } from 'nestjs-typeorm-paginate';
@@ -21,7 +21,7 @@ export class SongsController {
   constructor(private readonly songsService: SongsService) {}
 
   @Post()
-  async create(@Body() createSongDto: CreateSongDto): Promise<Song> {
+  async create(@Body() createSongDto: CreateSongDTO): Promise<Song> {
     return this.songsService.create(createSongDto);
   }
 
@@ -44,9 +44,9 @@ export class SongsController {
   @Put('id')
   async update(
     @Param() { id }: IdDto,
-    @Body() updateSongDto: UpdateSongDto,
+    @Body() updateSongDTO: UpdateSongDTO,
   ): Promise<UpdateResult> {
-    return this.songsService.update(id, updateSongDto);
+    return this.songsService.update(id, updateSongDTO);
   }
 
   @Delete('id')

@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateSongDto, UpdateSongDto } from './dto/song.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Song } from './entities/song.entity';
 import { Repository, UpdateResult } from 'typeorm';
@@ -8,13 +7,14 @@ import {
   Pagination,
   paginate,
 } from 'nestjs-typeorm-paginate';
+import { CreateSongDTO, UpdateSongDTO } from './dto/song.dto';
 
 @Injectable()
 export class SongsService {
   constructor(
     @InjectRepository(Song) private readonly songsRepository: Repository<Song>,
   ) {}
-  async create(createSongDto: CreateSongDto): Promise<Song> {
+  async create(createSongDto: CreateSongDTO): Promise<Song> {
     const song = this.songsRepository.create(createSongDto);
     return await this.songsRepository.save(song);
   }
@@ -37,9 +37,9 @@ export class SongsService {
 
   async update(
     id: number,
-    updateSongDto: UpdateSongDto,
+    updateSongDTO: UpdateSongDTO,
   ): Promise<UpdateResult> {
-    const song = await this.songsRepository.update(id, updateSongDto);
+    const song = await this.songsRepository.update(id, updateSongDTO);
     if (!song) {
       throw new NotFoundException('Song Not Found');
     }

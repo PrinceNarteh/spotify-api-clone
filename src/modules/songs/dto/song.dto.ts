@@ -1,3 +1,4 @@
+import { PartialType } from '@nestjs/mapped-types';
 import {
   IsArray,
   IsDateString,
@@ -7,7 +8,7 @@ import {
   IsString,
 } from 'class-validator';
 
-export class CreateSongDto {
+export class CreateSongDTO {
   @IsString()
   @IsNotEmpty()
   readonly title: string;
@@ -30,4 +31,4 @@ export class CreateSongDto {
   readonly lyrics: string;
 }
 
-export type UpdateSongDto = Partial<CreateSongDto>;
+export class UpdateSongDTO extends PartialType(CreateSongDTO) {}
