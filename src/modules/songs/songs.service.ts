@@ -14,6 +14,7 @@ export class SongsService {
   constructor(
     @InjectRepository(Song) private readonly songsRepository: Repository<Song>,
   ) {}
+
   async create(createSongDto: CreateSongDTO): Promise<Song> {
     const song = this.songsRepository.create(createSongDto);
     return await this.songsRepository.save(song);
