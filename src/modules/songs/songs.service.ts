@@ -13,7 +13,7 @@ import { CreateSongDTO, UpdateSongDTO } from './dto/song.dto';
 export class SongsService {
   constructor(
     @InjectRepository(Song) private readonly songsRepository: Repository<Song>,
-  ) {}
+  ) { }
 
   async create(createSongDto: CreateSongDTO): Promise<Song> {
     const song = this.songsRepository.create(createSongDto);
@@ -25,7 +25,9 @@ export class SongsService {
   }
 
   async paginate(options: IPaginationOptions): Promise<Pagination<Song>> {
-    return paginate(this.songsRepository, options);
+    const queryBuilder = this.songsRepository.createQueryBuilder('song');
+    queryBuilder.orderBy('song.releasedDate', 'DESC');
+    return paginate<Song>(queryBuilder, options);
   }
 
   async findOne(id: number): Promise<Song> {

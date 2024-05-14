@@ -5,10 +5,10 @@ import { SongsModule } from 'songs/songs.module';
 import { CommonModule } from './common/common.module';
 import { LoggerMiddleware } from 'common/middlewares/logger.middleware';
 import { SongsController } from 'songs/songs.controller';
-import { PlaylistsModule } from './modules/playlists/playlists.module';
 import { DataSource } from 'typeorm';
-import { EnvModule } from './env/env.module';
-import { DatabaseModule } from './database/database.module';
+import { DatabaseModule } from 'database/database.module';
+import { EnvModule } from 'env/env.module';
+import { PlaylistsModule } from 'playlists/playlists.module';
 
 @Module({
   imports: [

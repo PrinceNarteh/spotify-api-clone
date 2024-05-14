@@ -18,7 +18,7 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller('songs')
 export class SongsController {
-  constructor(private readonly songsService: SongsService) {}
+  constructor(private readonly songsService: SongsService) { }
 
   @Post()
   async create(@Body() createSongDto: CreateSongDTO): Promise<Song> {
@@ -33,6 +33,7 @@ export class SongsController {
     limit: number = 10,
   ): Promise<Pagination<Song>> {
     limit = limit > 100 ? 100 : limit;
+
     return this.songsService.paginate({ page, limit, route: '/songs' });
   }
 
