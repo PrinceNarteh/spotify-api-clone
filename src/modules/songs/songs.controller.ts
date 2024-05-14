@@ -33,7 +33,6 @@ export class SongsController {
     limit: number = 10,
   ): Promise<Pagination<Song>> {
     limit = limit > 100 ? 100 : limit;
-
     return this.songsService.paginate({ page, limit, route: '/songs' });
   }
 

@@ -9,6 +9,8 @@ import { DataSource } from 'typeorm';
 import { DatabaseModule } from 'database/database.module';
 import { EnvModule } from 'env/env.module';
 import { PlaylistsModule } from 'playlists/playlists.module';
+import { UsersModule } from './modules/users/users.module';
+import { ArtistsModule } from './modules/artists/artists.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { PlaylistsModule } from 'playlists/playlists.module';
     SongsModule,
     CommonModule,
     PlaylistsModule,
+    UsersModule,
+    ArtistsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
