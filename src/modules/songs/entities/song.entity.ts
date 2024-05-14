@@ -1,14 +1,12 @@
+import { Artist } from 'artists/entities/artist.entity';
 import { AbstractEntity } from 'common/utils/abstracts.entity';
 import { Playlist } from 'playlists/entities/playlist.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 
 @Entity('songs')
 export class Song extends AbstractEntity {
   @Column()
   title: string;
-
-  @Column('varchar', { array: true })
-  artists: string[];
 
   @Column({ type: 'date' })
   releasedDate: Date;
@@ -21,4 +19,8 @@ export class Song extends AbstractEntity {
 
   @ManyToOne(() => Playlist, (playlist) => playlist.songs)
   playlist: Playlist;
+
+  @ManyToMany(() => Artist, (artist) => artist.songs, { cascade: true })
+  @JoinTable({ name: 'songs_artists' })
+  artists: Artist[];
 }
