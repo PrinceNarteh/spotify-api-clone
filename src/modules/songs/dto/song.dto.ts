@@ -1,5 +1,4 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { Artist } from 'artists/entities/artist.entity';
 import {
   IsArray,
   IsDateString,
@@ -7,7 +6,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  ValidateNested,
 } from 'class-validator';
 
 export class CreateSongDTO {
@@ -17,8 +15,8 @@ export class CreateSongDTO {
 
   @IsNotEmpty()
   @IsArray()
-  @ValidateNested({ each: true })
-  readonly artists: Artist[];
+  @IsString({ each: true })
+  readonly artists: string[];
 
   @IsNotEmpty()
   @IsDateString()
