@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Song } from './entities/song.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import {
   IPaginationOptions,
   Pagination,
@@ -18,13 +18,15 @@ export class SongsService {
   ) {}
 
   async create(createSongDto: CreateSongDTO): Promise<Song> {
-    const artists = await Promise.all(
-      createSongDto.artists.map((artist) => this.preloadArtistByName(artist)),
-    );
+    const artists = await this.artistsRepo.findBy({
+      id: In([...createSongDto.artists]),
+    });
+
     const song = this.songsRepository.create({
       ...createSongDto,
       artists,
     });
+
     return await this.songsRepository.save(song);
   }
 
@@ -49,38 +51,23 @@ export class SongsService {
   async update(id: number, updateSongDTO: UpdateSongDTO): Promise<Song> {
     const artists =
       updateSongDTO.artists &&
-      (await Promise.all(
-        updateSongDTO.artists.map((artist) => this.preloadArtistByName(artist)),
-      ));
+      (await this.artistsRepo.findBy({ id: In([...updateSongDTO.artists]) }));
+
     const song = await this.songsRepository.preload({
       id,
       ...updateSongDTO,
       artists,
     });
+
     if (!song) {
       throw new NotFoundException('Song Not Found');
     }
+
     return this.songsRepository.save(song);
   }
 
   async delete(id: number): Promise<String> {
     await this.songsRepository.delete(id);
     return `Song Delete successfully`;
-  }
-
-  private async preloadArtistByName(stageName: string): Promise<Artist> {
-    const artist = await this.artistsRepo.findOne({
-      where: {
-        user: {
-          stageName,
-        },
-      },
-    });
-    if (!artist) {
-      throw new NotFoundException(
-        `Artist with the name ${stageName} not found`,
-      );
-    }
-    return artist;
   }
 }

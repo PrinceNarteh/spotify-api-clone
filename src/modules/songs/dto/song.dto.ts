@@ -4,6 +4,7 @@ import {
   IsDateString,
   IsMilitaryTime,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -15,8 +16,8 @@ export class CreateSongDTO {
 
   @IsNotEmpty()
   @IsArray()
-  @IsString({ each: true })
-  readonly artists: string[];
+  @IsNumber({}, { each: true })
+  readonly artists: number[];
 
   @IsNotEmpty()
   @IsDateString()
@@ -31,4 +32,4 @@ export class CreateSongDTO {
   readonly lyrics: string;
 }
 
-export class UpdateSongDTO extends PartialType(CreateSongDTO) { }
+export class UpdateSongDTO extends PartialType(CreateSongDTO) {}
