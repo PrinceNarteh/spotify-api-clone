@@ -9,12 +9,9 @@ export class User extends AbstractEntity {
   @Column()
   lastName: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
   password: string;
-
-  @Column()
-  stageName: string;
 }

@@ -17,7 +17,7 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller('songs')
 export class SongsController {
-  constructor(private readonly songsService: SongsService) { }
+  constructor(private readonly songsService: SongsService) {}
 
   @Post()
   async create(@Body() createSongDto: CreateSongDTO): Promise<Song> {
