@@ -28,6 +28,14 @@ export class UsersService {
     return paginate<User>(qb, options);
   }
 
+  async findOne(id: number): Promise<User> {
+    const user = await this.usersRepo.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException(`User not found`);
+    }
+    return user;
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       const user = this.usersRepo.create(createUserDto);
@@ -48,8 +56,13 @@ export class UsersService {
       ...updateUserDto,
     });
     if (!user) {
-      throw new NotFoundException(`User with ID #${id} not found`);
+      throw new NotFoundException(`User not found`);
     }
     return user;
+  }
+
+  async delete(id: number): Promise<User> {
+    const user = await this.findOne(id);
+    return this.usersRepo.remove(user);
   }
 }

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   Param,
   Patch,
@@ -41,5 +42,10 @@ export class UsersController {
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @Delete(':id')
+  async delete(@Param() { id }: IdDto): Promise<User> {
+    return this.usersService.delete(id);
   }
 }
