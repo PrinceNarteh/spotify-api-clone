@@ -3,10 +3,10 @@ import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class User extends AbstractEntity {
-  @Column()
+  @Column({ name: 'first_name' })
   firstName: string;
 
-  @Column()
+  @Column({ name: 'last_name' })
   lastName: string;
 
   @Column({ unique: true })

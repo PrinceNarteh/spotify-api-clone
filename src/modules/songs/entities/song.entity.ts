@@ -8,7 +8,7 @@ export class Song extends AbstractEntity {
   @Column()
   title: string;
 
-  @Column({ type: 'date' })
+  @Column({ name: 'released_date', type: 'date' })
   releasedDate: Date;
 
   @Column({ type: 'time' })
