@@ -4,9 +4,16 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { HashingService } from './hashing/hashing.service';
 import { BcryptService } from './hashing/bcrypt.service';
+import { JwtModule } from '@nestjs/jwt';
+import { authConstants } from './auth.constants';
 
 @Module({
-  imports: [UsersModule],
+  imports: [
+    JwtModule.register({
+      secret: authConstants.secret,
+    }),
+    UsersModule,
+  ],
   controllers: [AuthController],
   providers: [
     {

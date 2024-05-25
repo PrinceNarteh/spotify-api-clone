@@ -3,11 +3,13 @@ import { UsersService } from 'users/users.service';
 import { LoginDto } from './dto/loginDto';
 import { CreateUserDto } from 'users/dto/create-user.dto';
 import { HashingService } from './hashing/hashing.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly hashingServing: HashingService,
+    private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
   ) {}
 
@@ -18,7 +20,7 @@ export class AuthService {
     return user;
   }
 
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
     let user = await this.usersService.findOne({ email: loginDto.email });
     if (
       !user ||
@@ -26,6 +28,10 @@ export class AuthService {
     ) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    return user;
+    const payload = { sub: user.id, email: user.email };
+    const accessToken = this.jwtService.sign(payload);
+    return {
+      accessToken,
+    };
   }
 }
