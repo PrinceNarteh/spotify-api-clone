@@ -35,12 +35,12 @@ export class SongsController {
     return this.songsService.paginate({ page, limit, route: '/songs' });
   }
 
-  @Get('id')
+  @Get(':id')
   async findOne(@Param() { id }: IdDto): Promise<Song> {
     return this.songsService.findOne(id);
   }
 
-  @Put('id')
+  @Put(':id')
   async update(
     @Param() { id }: IdDto,
     @Body() updateSongDTO: UpdateSongDTO,

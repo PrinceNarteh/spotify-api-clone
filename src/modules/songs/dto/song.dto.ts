@@ -1,12 +1,12 @@
 import { PartialType } from '@nestjs/mapped-types';
 import {
   IsArray,
-  IsDateString,
   IsMilitaryTime,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  IsDate,
 } from 'class-validator';
 
 export class CreateSongDTO {
@@ -20,7 +20,7 @@ export class CreateSongDTO {
   readonly artists: number[];
 
   @IsNotEmpty()
-  @IsDateString()
+  @IsDate()
   readonly releasedDate: Date;
 
   @IsNotEmpty()
