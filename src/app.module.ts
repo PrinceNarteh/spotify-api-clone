@@ -11,6 +11,7 @@ import { EnvModule } from 'env/env.module';
 import { PlaylistsModule } from 'playlists/playlists.module';
 import { UsersModule } from './modules/users/users.module';
 import { ArtistsModule } from './modules/artists/artists.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ArtistsModule } from './modules/artists/artists.module';
     PlaylistsModule,
     UsersModule,
     ArtistsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
