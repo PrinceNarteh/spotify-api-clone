@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { AbstractEntity } from 'common/utils/abstracts.entity';
 import { Playlist } from 'playlists/entities/playlist.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
@@ -13,6 +14,7 @@ export class User extends AbstractEntity {
   @Column({ unique: true })
   email: string;
 
+  @Exclude()
   @Column()
   password: string;
 

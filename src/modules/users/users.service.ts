@@ -12,16 +12,17 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import constants from 'common/constants';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { HashingService } from './hashing/hashing.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepo: Repository<User>,
+    private readonly hashingService: HashingService,
   ) {}
 
   async findAll(options: IPaginationOptions): Promise<Pagination<User>> {
@@ -39,8 +40,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
-      const salt = await bcrypt.genSalt();
-      const password = await bcrypt.hash(createUserDto.password, salt);
+      const password = await this.hashingService.hash(createUserDto.password);
       const user = await this.usersRepo.save({ ...createUserDto, password });
       delete user.password;
       return user;
