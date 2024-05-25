@@ -20,7 +20,7 @@ export class PlaylistsService {
     const playlist = new Playlist();
     playlist.name = createPlaylistDto.name;
 
-    const user = await this.usersService.findOne(createPlaylistDto.user);
+    const user = await this.usersService.findById(createPlaylistDto.user);
     playlist.user = user;
 
     const songs = await this.songsRepo.findBy({

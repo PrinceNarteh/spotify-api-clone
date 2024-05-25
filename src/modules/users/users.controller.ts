@@ -33,12 +33,7 @@ export class UsersController {
 
   @Get(':id')
   async findOne(@Param() { id }: IdDto): Promise<User> {
-    return this.usersService.findOne(id);
-  }
-
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createUserDto);
+    return this.usersService.findById(id);
   }
 
   @Patch(':id')

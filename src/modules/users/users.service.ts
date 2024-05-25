@@ -4,7 +4,7 @@ import {
   paginate,
 } from 'nestjs-typeorm-paginate';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import {
   ConflictException,
@@ -15,14 +15,12 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import constants from 'common/constants';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { HashingService } from './hashing/hashing.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepo: Repository<User>,
-    private readonly hashingService: HashingService,
   ) {}
 
   async findAll(options: IPaginationOptions): Promise<Pagination<User>> {
@@ -30,7 +28,15 @@ export class UsersService {
     return paginate<User>(qb, options);
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOne(options: FindOptionsWhere<User>): Promise<User> {
+    const user = await this.usersRepo.findOneBy(options);
+    if (!user) {
+      throw new NotFoundException(`User not found`);
+    }
+    return user;
+  }
+
+  async findById(id: number): Promise<User> {
     const user = await this.usersRepo.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(`User not found`);
@@ -40,12 +46,9 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
-      const password = await this.hashingService.hash(createUserDto.password);
-      const user = await this.usersRepo.save({ ...createUserDto, password });
-      delete user.password;
+      const user = await this.usersRepo.save(createUserDto);
       return user;
     } catch (error) {
-      console.log(typeof error.code);
       if (error.code === constants.PG_UNIQUE_VIOLATION_ERROR_CODE) {
         throw new ConflictException('Email already in use.');
       }
@@ -65,7 +68,7 @@ export class UsersService {
   }
 
   async delete(id: number): Promise<User> {
-    const user = await this.findOne(id);
+    const user = await this.findById(id);
     return this.usersRepo.remove(user);
   }
 }
