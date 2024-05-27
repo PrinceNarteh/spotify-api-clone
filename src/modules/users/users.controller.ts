@@ -6,13 +6,11 @@ import {
   Get,
   Param,
   Patch,
-  Post,
   Query,
 } from '@nestjs/common';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { IdDto } from 'common/dtos/id.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
