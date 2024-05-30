@@ -20,4 +20,10 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Playlist, (playlist) => playlist.user)
   playlists: Playlist[];
+
+  @Column({ default: false, type: 'boolean' })
+  enable2FA: boolean;
+
+  @Column({ nullable: true, type: 'text' })
+  twoFASecret: string;
 }
