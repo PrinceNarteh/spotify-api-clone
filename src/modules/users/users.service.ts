@@ -4,7 +4,7 @@ import {
   paginate,
 } from 'nestjs-typeorm-paginate';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { FindOptionsWhere, Repository, UpdateResult } from 'typeorm';
 import { User } from './entities/user.entity';
 import {
   ConflictException,
@@ -79,6 +79,13 @@ export class UsersService {
         twoFASecret: secret,
         enable2FA: true,
       },
+    );
+  }
+
+  async disable2FA(userId: number): Promise<UpdateResult> {
+    return this.usersRepo.update(
+      { id: userId },
+      { enable2FA: false, twoFASecret: null },
     );
   }
 }

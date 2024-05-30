@@ -8,6 +8,7 @@ import { ArtistsService } from 'artists/artists.service';
 import { PayloadType } from 'types/payload.types';
 import { Enable2FAType } from 'types/auth-types';
 import * as speakeasy from 'speakeasy';
+import { UpdateResult } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -56,5 +57,9 @@ export class AuthService {
     user.twoFASecret = secret.base32;
     await this.usersService.updateSecretKey(user.id, user.twoFASecret);
     return { secret: user.twoFASecret };
+  }
+
+  async disable2FA(userId: number): Promise<UpdateResult> {
+    return this.usersService.disable2FA(userId);
   }
 }
