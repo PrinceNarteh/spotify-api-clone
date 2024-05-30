@@ -71,4 +71,14 @@ export class UsersService {
     const user = await this.findById(id);
     return this.usersRepo.remove(user);
   }
+
+  async updateSecretKey(userId: number, secret: string) {
+    return this.usersRepo.update(
+      { id: userId },
+      {
+        twoFASecret: secret,
+        enable2FA: true,
+      },
+    );
+  }
 }
