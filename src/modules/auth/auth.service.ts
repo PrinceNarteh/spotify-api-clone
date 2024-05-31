@@ -62,4 +62,21 @@ export class AuthService {
   async disable2FA(userId: number): Promise<UpdateResult> {
     return this.usersService.disable2FA(userId);
   }
+
+  async validate2FA(
+    userId: number,
+    token: string,
+  ): Promise<{ verified: boolean }> {
+    try {
+      const user = await this.usersService.findById(userId);
+      const isVerified = speakeasy.totp.verify({
+        secret: user.twoFASecret,
+        token,
+        encoding: 'base32',
+      });
+      return { verified: isVerified ? true : false };
+    } catch (error) {
+      throw new UnauthorizedException('Error verifying token');
+    }
+  }
 }

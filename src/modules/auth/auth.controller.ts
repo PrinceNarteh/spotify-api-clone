@@ -1,11 +1,13 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'users/dto/create-user.dto';
 import { LoginDto } from './dto/loginDto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Enable2FAType } from 'types/auth-types';
 import { User } from './decorators/user.decorator';
 import { UpdateResult } from 'typeorm';
+import { JwtAuth } from './decorators/jwt-auth.decorator';
+import { ValidateTokenDTO } from './dto/validate-token.dto';
+import { PayloadType } from 'types/payload.types';
 
 @Controller('auth')
 export class AuthController {
@@ -22,14 +24,23 @@ export class AuthController {
   }
 
   @Post('enable-2fa')
-  @UseGuards(JwtAuthGuard)
-  async enable2FA(@User() user): Promise<Enable2FAType> {
-    return this.authService.enable2FA(user.id);
+  @JwtAuth
+  async enable2FA(@User() user: PayloadType): Promise<Enable2FAType> {
+    return this.authService.enable2FA(user.userId);
   }
 
   @Post('disable-2fa')
-  @UseGuards(JwtAuthGuard)
-  async disable2FA(@User() user): Promise<UpdateResult> {
-    return this.authService.disable2FA(user.id);
+  @JwtAuth
+  async disable2FA(@User() user: PayloadType): Promise<UpdateResult> {
+    return this.authService.disable2FA(user.userId);
+  }
+
+  @Post('validate-2fa')
+  @JwtAuth
+  async validate2FA(
+    @Body() { token }: ValidateTokenDTO,
+    @User() user: PayloadType,
+  ): Promise<{ verified: boolean }> {
+    return this.authService.validate2FA(user.userId, token);
   }
 }
