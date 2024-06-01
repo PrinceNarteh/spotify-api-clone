@@ -9,6 +9,7 @@ import { PayloadType } from 'types/payload.types';
 import { Enable2FAType } from 'types/auth-types';
 import * as speakeasy from 'speakeasy';
 import { UpdateResult } from 'typeorm';
+import { User } from 'users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -40,7 +41,9 @@ export class AuthService {
     }
     const payload: PayloadType = { userId: user.id, email: user.email };
 
-    const artist = await this.artistsService.findArtist(user.id);
+    const artist = await this.artistsService.findOne({
+      where: { user: { id: user.id } },
+    });
     if (artist) {
       payload.artistId = artist.id;
     }

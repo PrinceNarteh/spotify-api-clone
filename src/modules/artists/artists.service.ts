@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Artist } from './entities/artist.entity';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class ArtistsService {
@@ -16,5 +16,9 @@ export class ArtistsService {
       throw new NotFoundException('Artist not found');
     }
     return artist;
+  }
+
+  async findOne(options: FindOneOptions<Artist>): Promise<Artist> {
+    return this.artistsRepo.findOne(options);
   }
 }
