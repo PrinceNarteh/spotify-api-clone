@@ -9,6 +9,7 @@ import { authConstants } from './auth.constants';
 import { PassportModule } from '@nestjs/passport';
 import { JWTStrategy } from './strategies/jwt.strategy';
 import { ArtistsModule } from 'artists/artists.module';
+import { ApiKeyStrategy } from './strategies/api-key.strategy';
 
 @Module({
   imports: [
@@ -30,6 +31,8 @@ import { ArtistsModule } from 'artists/artists.module';
     },
     AuthService,
     JWTStrategy,
+    ApiKeyStrategy,
   ],
+  exports: [AuthService, ApiKeyStrategy],
 })
 export class AuthModule {}
