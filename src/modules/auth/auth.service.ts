@@ -26,7 +26,11 @@ export class AuthService {
     return user;
   }
 
-  async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
+  async login(
+    loginDto: LoginDto,
+  ): Promise<
+    { accessToken: string } | { validate2FA: string; message: string }
+  > {
     let user = await this.usersService.findOne({ email: loginDto.email });
     if (
       !user ||
@@ -35,13 +39,22 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
     const payload: PayloadType = { userId: user.id, email: user.email };
+
     const artist = await this.artistsService.findArtist(user.id);
     if (artist) {
       payload.artistId = artist.id;
     }
-    const accessToken = this.jwtService.sign(payload);
+
+    if (user.enable2FA && user.twoFASecret) {
+      return {
+        validate2FA: 'http://localhost:3000/auth/validate-2fa',
+        message:
+          'Please send the one-time password/token from your Google Authenticator App',
+      };
+    }
+
     return {
-      accessToken,
+      accessToken: this.jwtService.sign(payload),
     };
   }
 
