@@ -12,6 +12,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { v4 as uuid } from 'uuid';
 import { CreateUserDto } from './dto/create-user.dto';
 import constants from 'common/constants';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -46,7 +47,10 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
-      const user = await this.usersRepo.save(createUserDto);
+      const user = await this.usersRepo.save({
+        ...createUserDto,
+        apiKey: uuid(),
+      });
       return user;
     } catch (error) {
       if (error.code === constants.PG_UNIQUE_VIOLATION_ERROR_CODE) {
@@ -87,5 +91,13 @@ export class UsersService {
       { id: userId },
       { enable2FA: false, twoFASecret: null },
     );
+  }
+
+  async findByApiKey(apiKey: string): Promise<User> {
+    const user = await this.usersRepo.findOneBy({ apiKey });
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
   }
 }

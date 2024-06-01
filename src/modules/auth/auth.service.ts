@@ -92,4 +92,8 @@ export class AuthService {
       throw new UnauthorizedException('Error verifying token');
     }
   }
+
+  async validateUserByApiKey(apiKey: string): Promise<User> {
+    return this.usersService.findByApiKey(apiKey);
+  }
 }

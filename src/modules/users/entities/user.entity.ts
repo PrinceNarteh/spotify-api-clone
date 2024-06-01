@@ -26,4 +26,7 @@ export class User extends AbstractEntity {
 
   @Column({ nullable: true, type: 'text' })
   twoFASecret: string;
+
+  @Column()
+  apiKey: string;
 }
