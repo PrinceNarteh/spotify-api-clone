@@ -11,6 +11,7 @@ export class ApiKeyStrategy extends PassportStrategy(Strategy) {
 
   async validate(apiKey: string) {
     const user = await this.authService.validateUserByApiKey(apiKey);
+    console.log({ user });
     if (!user) {
       throw new UnauthorizedException();
     } else {

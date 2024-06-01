@@ -1,4 +1,4 @@
 import { UseGuards, applyDecorators } from '@nestjs/common';
-import { ApiKeyStrategy } from 'auth/strategies/api-key.strategy';
+import { AuthGuard } from '@nestjs/passport';
 
-export const ApiBearerAuth = applyDecorators(UseGuards(ApiKeyStrategy));
+export const ApiBearerAuth = applyDecorators(UseGuards(AuthGuard('bearer')));
