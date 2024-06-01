@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Artist } from './entities/artist.entity';
-import { FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class ArtistsService {
@@ -9,6 +9,15 @@ export class ArtistsService {
     @InjectRepository(Artist)
     private readonly artistsRepo: Repository<Artist>,
   ) {}
+
+  async findAll(options: FindManyOptions<Artist>): Promise<Artist[]> {
+    return this.artistsRepo.find({
+      ...options,
+      relations: {
+        user: true,
+      },
+    });
+  }
 
   async findArtist(id: number): Promise<Artist> {
     const artist = await this.artistsRepo.findOneBy({ user: { id } });
