@@ -8,11 +8,15 @@ import { UpdateResult } from 'typeorm';
 import { JwtAuth } from './decorators/jwt-auth.decorator';
 import { ValidateTokenDTO } from './dto/validate-token.dto';
 import { PayloadType } from 'types/payload.types';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiResponse({ status: 201, description: 'It will return accessToken' })
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
     return this.authService.register(createUserDto);

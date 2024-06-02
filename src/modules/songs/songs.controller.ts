@@ -16,7 +16,9 @@ import { CreateSongDTO, UpdateSongDTO } from './dto/song.dto';
 import { Song } from './entities/song.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { JwtArtistGuard } from 'artists/guards/jwt-artist.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('songs')
 @Controller('songs')
 export class SongsController {
   constructor(private readonly songsService: SongsService) {}
